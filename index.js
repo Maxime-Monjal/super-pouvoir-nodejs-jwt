@@ -31,9 +31,9 @@ app.get('/', (request, response) => {
 });
 
 
-app.get("/:id", (req, res) => {
+app.get("/power/:id", (req, res) => {
   connection.query(
-    `SELECT * FROM album WHERE id=?`,
+    `SELECT * FROM super_pouvoir WHERE idsuper_pouvoir = ?`,
     [req.params.id],
     (error, result) => {
       if (error) {
