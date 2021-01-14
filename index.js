@@ -31,6 +31,44 @@ app.get('/', (request, response) => {
 });
 
 
+app.get("/:id", (req, res) => {
+  connection.query(
+    `SELECT * FROM album WHERE id=?`,
+    [req.params.id],
+    (error, result) => {
+      if (error) {
+        res.status(500).send(error);
+      } else if (result.length === 0) {
+        res.sendStatus(404);
+      } else {
+        res.status(200).json(result[0]);
+      }
+    }
+  );
+});
+
+
+// GET - Ordered data recovery (i.e. ascending, descending)
+// EX : http://localhost:8080/prices/order/ASC ou http://localhost:8080/prices/order/asc
+
+app.get("/prices/order/:value", (req, res) => {
+  let order = 'ASC';
+  if (req.params.value.toLowerCase() === 'desc') {
+    order = 'DESC';
+  }
+  connection.query(
+    `SELECT * FROM super_pouvoir ORDER BY prix ${order}`,
+    (error, result) => {
+      if (error) {
+        res.status(500).send(error);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
+
 // Don't write anything below this line!
 app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}.`);
