@@ -16,22 +16,34 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /* super_power list */
+app.get('/:category', (req, res) => {
+  connection.query(
+    `SELECT * FROM super_pouvoir sp JOIN catégorie cat ON sp.catégorie_idcatégorie = cat.idcatégorie WHERE cat.name = ?`,
+    [req.params.category],
+    (error, result) => {
+      if (error) {
+        res.status(500).json({ errorMessage: error.message });
+      } else {
+        res.status(201).json(result);
+      }
+    }
+  );
+});
 
 app.get('/', (request, response) => {
   connection.query('SELECT * FROM super_pouvoir', (error, result) => {
-      if(error) {
-        response.status(500).send(error);
-      }
-      if(result.lenght === 0) {
-        response.sendStatus(404);
-      } else {
-        response.status(200).json(result);
-      }
+    if (error) {
+      response.status(500).send(error);
+    }
+    if (result.lenght === 0) {
+      response.sendStatus(404);
+    } else {
+      response.status(200).json(result);
+    }
   });
 });
 
-
-app.get("/power/:id", (req, res) => {
+app.get('/power/:id', (req, res) => {
   connection.query(
     `SELECT * FROM super_pouvoir WHERE idsuper_pouvoir = ?`,
     [req.params.id],
@@ -47,11 +59,10 @@ app.get("/power/:id", (req, res) => {
   );
 });
 
-
 // GET - Ordered data recovery (i.e. ascending, descending)
 // EX : http://localhost:8080/prices/order/ASC ou http://localhost:8080/prices/order/asc
 
-app.get("/prices/order/:value", (req, res) => {
+app.get('/prices/order/:value', (req, res) => {
   let order = 'ASC';
   if (req.params.value.toLowerCase() === 'desc') {
     order = 'DESC';
@@ -67,7 +78,6 @@ app.get("/prices/order/:value", (req, res) => {
     }
   );
 });
-
 
 // Don't write anything below this line!
 app.listen(SERVER_PORT, () => {
