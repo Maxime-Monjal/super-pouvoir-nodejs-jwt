@@ -15,6 +15,23 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+/* filter sub-categories */
+
+app.get('/categories/inutile/max-effet', (req, res) => {
+  connection.query(
+    `SELECT * FROM super_pouvoir sp JOIN categorie cat ON sp.categorie_idcategorie = cat.idcategorie WHERE cat.name = "inutile" AND time <= ?`,
+    [req.query.duree],
+      (error, result) => {
+        if (error) {
+          res.status(500).json({ errorMessage: error.message });
+        } else {
+          res.status(201).json({...result});
+        }
+      }
+    );
+  }
+);
+
 /* filter categories */
 
 app.get('/categories/inutile', (req, res) => {
