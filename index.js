@@ -149,7 +149,6 @@ app.get('/power/:id', (req, res) => {
 });
 
 app.get('/product/:slug', (req, res) => {
-  console.log(req.params.slug);
   connection.query(
     `SELECT * FROM super_pouvoir WHERE slug = ? `,
     [req.params.slug],
