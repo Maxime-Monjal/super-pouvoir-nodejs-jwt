@@ -148,6 +148,22 @@ app.get('/power/:id', (req, res) => {
   );
 });
 
+app.get('/product/:slug', (req, res) => {
+  connection.query(
+    `SELECT * FROM super_pouvoir WHERE slug = ? `,
+    [req.params.slug],
+    (error, result) => {
+      if (error) {
+        res.status(500).send(error);
+      } else if (result.length === 0) {
+        res.sendStatus(404);
+      } else {
+        res.status(200).json(result[0]);
+      }
+    }
+  );
+});
+
 // GET - Ordered data recovery (i.e. ascending, descending)
 // EX : http://localhost:8080/prices/order/ASC ou http://localhost:8080/prices/order/asc
 
